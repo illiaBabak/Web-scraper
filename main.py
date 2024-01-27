@@ -29,44 +29,35 @@ def save(data_to_save):
     print(f"File saved in {DESTINATION_PATH}")
 
 
-url = input("Enter the URL to connect: ")
-
-# https://www.washingtonpost.com/technology/2020/09/25/privacy-check-blacklight/ // works
-# https://edition.cnn.com/travel/article/scenic-airport-landings-2020/index.html
-# https://www.reuters.com/article/us-health-coronavirus-global-deaths/global-coronavirus-deaths-pass-agonizing-milestone-of-1-million-idUSKBN26K08Y
-
-# Gets the status code to see if the website is up
-r = requests.get(url)
-content = r.content
-status = r.status_code
+# Main function
+def main():
+    url = input("Enter the URL to connect: ")
+    r = requests.get(url)
+    status = r.status_code
+    check_status(status, url)
 
 
 # Function to check if the status code is 200
-def check_status():
-    global status
-    # Check status of the connection
+def check_status(status, url):
     if status != 200:
         print("Failed to connect website or wrong url")
     else:
         print("Succesfully Connected")
-        div_to_text()
+        get_content_from_page(url)
 
 
-# Connect BeautifulSoup html parser
-soup = BeautifulSoup(r.content, "html.parser")
-
-# Getting the title tag
-print(soup.title)
-
-
-def div_to_text():
+# Function to get content from page
+def get_content_from_page(url):
     article = Article(url)
     article.download()
     article.parse()
 
     # Get the article text:
     print(article.text)
-    # mozhna zapisat article.text і прокінуть в save()
+    # Save page content to file
+    main_content = article.text
+    save(main_content)
 
 
-check_status()
+if __name__ == "__main__":
+    main()
