@@ -1,8 +1,30 @@
 import requests
 import os
 import shutil
-from bs4 import BeautifulSoup
 from newspaper import Article
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
+
+window = Tk()
+window.geometry("400x200")
+window.title("Python Web Scraper")
+
+# Styling
+
+# Import the tcl file
+window.tk.call("source", "forest-dark.tcl")
+# Set the theme with the theme_use method
+ttk.Style().theme_use("forest-dark")
+
+enter_url_text = ttk.Label(window, text="Enter the URL to connect: ")
+enter_url_text.pack(pady=5)
+
+url_entry = ttk.Entry(window, justify="center")
+url_entry.pack(pady=5)
+
+status_label = ttk.Label(window, text="")
+status_label.pack(pady=10)
 
 FILE_NAME = "data.txt"
 DOWNLOAD_PATH = os.path.join(os.path.expanduser("~"), "Downloads")
@@ -10,6 +32,10 @@ DESTINATION_PATH = os.path.join(DOWNLOAD_PATH, FILE_NAME)
 
 # A counter that count the number of saved files
 counter = 1
+
+
+def show_alert(msg):
+    messagebox.showinfo("Alert", msg)
 
 
 # A function that will save data to txt file
@@ -25,24 +51,46 @@ def save(data_to_save):
     with open(FILE_NAME, "w") as file:
         file.write(data_to_save)
 
+    status_label.config(text="")
+    url_entry.delete(0, END)
+    window.update()
+
     shutil.move(FILE_NAME, DESTINATION_PATH)
-    print(f"File saved in {DESTINATION_PATH}")
+    window.after(
+        0, show_alert, f"Succesfully Connected\nFile saved in {DESTINATION_PATH}"
+    )
 
 
-# Main function
-def main():
-    url = input("Enter the URL to connect: ")
-    r = requests.get(url)
-    status = r.status_code
-    check_status(status, url)
+def request_to_page(url):
+    try:
+        r = requests.get(url)
+        status = r.status_code
+        check_status(status, url)
+    except:
+        show_alert("Failed to connect website or wrong url")
+        status_label.config(text="")
+        return
+
+
+def get_data():
+    url = url_entry.get()
+
+    if not url:
+        show_alert("Enter valid URL")
+        return
+
+    status_label.config(text="Connecting...")
+    window.update()
+
+    window.after(0, request_to_page, url)
 
 
 # Function to check if the status code is 200
 def check_status(status, url):
     if status != 200:
-        print("Failed to connect website or wrong url")
+        status_label.config(text="")
+        show_alert("Failed to connect website or wrong url")
     else:
-        print("Succesfully Connected")
         get_content_from_page(url)
 
 
@@ -52,12 +100,15 @@ def get_content_from_page(url):
     article.download()
     article.parse()
 
-    # Get the article text:
-    print(article.text)
     # Save page content to file
     main_content = article.text
     save(main_content)
 
 
-if __name__ == "__main__":
-    main()
+# , bg="black", fg="white",
+btn = ttk.Button(window, text="Get data", command=get_data)
+
+btn.pack(pady=20)
+status_label.pack(side="top", pady=10)
+
+window.mainloop()
