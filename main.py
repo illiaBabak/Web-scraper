@@ -61,6 +61,7 @@ def save(data_to_save):
     )
 
 
+# Function that executes a page request
 def request_to_page(url):
     try:
         r = requests.get(url)
@@ -72,7 +73,8 @@ def request_to_page(url):
         return
 
 
-def get_data():
+# Function that receives the url
+def get_url():
     url = url_entry.get()
 
     if not url:
@@ -106,7 +108,7 @@ def get_content_from_page(url):
 
 
 # , bg="black", fg="white",
-btn = ttk.Button(window, text="Get data", command=get_data)
+btn = ttk.Button(window, text="Get data", command=get_url)
 
 btn.pack(pady=20)
 status_label.pack(side="top", pady=10)
