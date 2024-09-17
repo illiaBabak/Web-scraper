@@ -7,6 +7,8 @@ This program written in Python using Tkinter by [dz1to4ka](https://github.com/il
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/2048px-Python.svg.png" alt="Python" width="75" height="75" style="object-fit: cover;">
 <img src="https://3.bp.blogspot.com/-B0GC-XFR1qM/V3t_4N4SXNI/AAAAAAAAC08/74j5MJm0K_Uv8osVqVeBCL4xCcXW-hpOgCLcB/s200/tkinter-pluma.png" alt="Tkinter" width="75" height="75">
 
+27.01.2024-01.02.2024
+
 # Web scraper
 
 1wbTRgPQIJGpYma7k4GK6R4p0chK_6ffY
